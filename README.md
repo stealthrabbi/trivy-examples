@@ -82,6 +82,10 @@ docker run --rm -v $PWD/.trivyignore:/.trivyignore -v $PWD/configs:/root/configs
 
 for non-docker usage, the .trivyignore file is already in the correct location if running trivy from the root directory. Try editing the file to filter / unfilter things.
 
+```
+trivy fs --security-checks vuln,config ./configs
+```
+
 # Usage notes
 
 If scanning your built docker image, you may come across vulnerabilities that do not seem to be
