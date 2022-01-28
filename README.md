@@ -26,16 +26,23 @@ determiend prior to pushing a release package to an artifact repository.
 
 # Scanning docker images via trivy
 
-Note, these are being run from windows, with the trivy cache being mounted to `C:\temp-trivy`. Change this to whatever directory you want to use to cache the trivy database.
+Note, these examples are being run from windows, with the trivy cache being mounted to `C:\temp-trivy`. Change this to whatever directory you want to use to cache the trivy database.
+
+To scan docker images locally via the docker container, you must mount `docker.sock`, e.g. `-v //var/run/docker.sock:/var/run/docker.sock`
 
 These examples show running trivy both as a docker container (option 1), and natively (option 2).
 
 Various [commmand line interface options](https://aquasecurity.github.io/trivy/v0.22.0/getting-started/cli/image/) exist, such as specifying the exit code to use if there are findings.
 
+The docker commands below are multi-line escaped with back-ticks. Replace with `\` for Linux
+
 ## hello-world example - should reveal no errors
 
 ```
-docker run --rm -v C:\temp-trivy:/root/.cache/ aquasec/trivy:latest image hello-world
+docker run --rm `
+-v //var/run/docker.sock:/var/run/docker.sock `
+-v C:\temp-trivy:/root/.cache/ aquasec/trivy:latest `
+image hello-world
 ```
 
 ```
@@ -45,7 +52,10 @@ trivy image hello-world
 ## Node Alpine - 3 findings
 
 ```
-docker run --rm -v C:\temp-trivy:/root/.cache/ aquasec/trivy:latest image node:14-alpine
+docker run --rm `
+-v //var/run/docker.sock:/var/run/docker.sock `
+-v C:\temp-trivy:/root/.cache/ aquasec/trivy:latest `
+image node:14-alpine
 ```
 
 ```
@@ -57,7 +67,12 @@ trivy image hello-world node:14-alpine
 With docker image, the folder for scanning must be mounted as a path inside the container. This example uses the `./configs/` directory in this repository.
 
 ```
-docker run --rm -v $PWD/configs\:/root/configs/ -v C:\temp-trivy:/root/.cache/ aquasec/trivy:latest fs --security-checks vuln,config /root/configs
+docker run --rm `
+-v //var/run/docker.sock:/var/run/docker.sock `
+-v $PWD/configs\:/root/configs/ `
+-v C:\temp-trivy:/root/.cache/ `
+aquasec/trivy:latest `
+fs --security-checks vuln,config /root/configs
 ```
 
 ```
