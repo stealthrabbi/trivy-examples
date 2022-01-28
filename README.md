@@ -28,7 +28,7 @@ determiend prior to pushing a release package to an artifact repository.
 
 Note, these examples are being run from windows, with the trivy cache being mounted to `C:\temp-trivy`. Change this to whatever directory you want to use to cache the trivy database.
 
-To scan docker images locally via the docker container, you must mount `docker.sock`, e.g. `-v //var/run/docker.sock:/var/run/docker.sock`
+To scan docker images locally via the docker container, you must mount `docker.sock`, e.g. `-v //var/run/docker.sock:/var/run/docker.sock`. Without this, it will scan remote images only, and will not scan any locally build images you have.
 
 These examples show running trivy both as a docker container (option 1), and natively (option 2).
 
