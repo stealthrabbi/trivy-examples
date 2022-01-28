@@ -5,6 +5,11 @@ Examples of tinkering with Trivy vulnerability scanner
 Always consult the [latest Trivy documentation](https://aquasecurity.github.io/trivy/). These notes are meant to be a
 general guide, but may be out of date with the latest Trivy. At the time of writing, 0.22.0 was the latest.
 
+Trivy can be used to scan docker images (either your own, or public ones) on your local system. It can be run either as a docker image, or installed natively on an O/S.
+
+Trivy can be integrated in to your Continuous Integration (CI) process. THis is advantageous because vulnerabilities can be
+determiend prior to pushing a release package to an artifact repository.
+
 # Setup
 
 ## Option 1 - Use trivy docker image
@@ -76,3 +81,13 @@ docker run --rm -v $PWD/.trivyignore:/.trivyignore -v $PWD/configs:/root/configs
 ```
 
 for non-docker usage, the .trivyignore file is already in the correct location if running trivy from the root directory. Try editing the file to filter / unfilter things.
+
+# Usage notes
+
+If scanning your built docker image, you may come across vulnerabilities that do not seem to be
+caused by your Dockerfile / software. Trivy tries to separate out vulnerabilities from the base image
+and contents added by your image. However, depending on the base image, it may be hard to distinguish that. FOr example,
+`alpine-node` contains vulnerable node packages, but these show up in the node packages section of the vuln report, not in the
+base image report.
+
+So, consider scanning the base image of your custom containers, in addition to the final image.
